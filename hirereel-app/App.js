@@ -1,16 +1,20 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, StyleSheet, StatusBar, SafeAreaView, Text } from "react-native";
+import { View, StyleSheet, StatusBar, Text } from "react-native";
 import HomeScreen from "./screens/HomeScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
+import CreateScreen from "./screens/CreateScreen.js";
+import NetworkScreen from "./screens/NetworkScreen.js";
+import Header from "./components/Header.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#EC4D04" }}>
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="#EC4D04"
@@ -26,6 +30,10 @@ export default function App() {
                 iconName = focused ? "home" : "home-outline";
               } else if (route.name === "Inbox") {
                 iconName = focused ? "mail" : "mail-outline";
+              } else if (route.name === "Create") {
+                iconName = focused ? "add-circle" : "add-circle-outline";
+              } else if (route.name === "Network") {
+                iconName = focused ? "people" : "people-outline";
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
@@ -45,20 +53,7 @@ export default function App() {
             name="Home"
             component={HomeScreen}
             options={{
-              headerTitle: () => (
-                <Text
-                  style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "bold" }}
-                >
-                  Home
-                </Text>
-              ),
-              // headerTitle: () => (
-              //   <Image
-              //     source={require('.image.png')}
-              //     style={{ width: 100, height: 40 }}
-              //     resizeMode="contain"
-              //   />
-              // ),
+              headerTitle: () => <Header />,
               headerStyle: {
                 backgroundColor: "#EC4D04",
               },
@@ -68,13 +63,27 @@ export default function App() {
             name="Inbox"
             component={InboxScreen}
             options={{
-              headerTitle: () => (
-                <Text
-                  style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "bold" }}
-                >
-                  Inbox
-                </Text>
-              ),
+              headerTitle: () => <Header />,
+              headerStyle: {
+                backgroundColor: "#EC4D04",
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Create"
+            component={CreateScreen}
+            options={{
+              headerTitle: () => <Header />,
+              headerStyle: {
+                backgroundColor: "#EC4D04",
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Network"
+            component={NetworkScreen}
+            options={{
+              headerTitle: () => <Header />,
               headerStyle: {
                 backgroundColor: "#EC4D04",
               },
@@ -82,6 +91,6 @@ export default function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
