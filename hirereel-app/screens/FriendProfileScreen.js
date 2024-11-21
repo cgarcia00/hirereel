@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 
-const ProfileScreen = ({ route, navigation }) => {
+const FriendProfileScreen = ({ route, navigation }) => {
   const { profile } = route.params; // Receive the profile data from navigation
 
   return (
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default FriendProfileScreen;

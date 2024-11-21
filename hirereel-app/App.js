@@ -7,7 +7,8 @@ import HomeScreen from "./screens/HomeScreen.js";
 import InboxScreen from "./screens/InboxScreen.js";
 import CreateScreen from "./screens/CreateScreen.js";
 import NetworkScreen from "./screens/NetworkScreen.js";
-import ProfileScreen from "./screens/ProfileScreen.js";
+import FriendProfileScreen from "./screens/FriendProfileScreen.js";
+import RecruiterProfileScreen from "./screens/RecruiterProfileScreen.js";
 import Header from "./components/Header.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -30,8 +31,19 @@ const NetworkStack = () => {
         }}
       />
       <Stack.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
+        name="FriendProfileScreen"
+        component={FriendProfileScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerLeft: () => null,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="RecruiterProfileScreen"
+        component={RecruiterProfileScreen}
         options={{
           headerTitle: () => <Header />,
           headerLeft: () => null,

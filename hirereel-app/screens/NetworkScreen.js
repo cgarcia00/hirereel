@@ -116,7 +116,12 @@ const NetworkScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.listItem}
             onPress={() =>
-              navigation.navigate("ProfileScreen", { profile: item })
+              navigation.navigate(
+                selectedTab === "Friends"
+                  ? "FriendProfileScreen"
+                  : "RecruiterProfileScreen",
+                { profile: item }
+              )
             }
           >
             <Image source={item.image} style={styles.profileImage} />
