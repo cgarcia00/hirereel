@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useVideoPlayer, VideoView } from "expo-video";
+import { useIsFocused } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
@@ -15,14 +16,16 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
     playerInstance.loop = true;
   });
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlaying && isFocused) {
       player.play();
     } else {
       player.pause();
       player.seekBy(0);
     }
-  }, [isPlaying, player]);
+  }, [isPlaying, isFocused, player]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -62,12 +65,11 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
           </View>
           <View style={styles.skillsSubcontainer}>
             <Text>Skills: </Text>
-            <View style={styles.skill}>
-              <Text style={styles.skillsText}>{videoData.skills[0]}</Text>
-            </View>
-            <View style={styles.skill}>
-              <Text style={styles.skillsText}>{videoData.skills[1]}</Text>
-            </View>
+            {videoData.skills.map((skill, index) => (
+              <View style={styles.skill} key={index}>
+                <Text style={styles.skillsText}>{skill}</Text>
+              </View>
+            ))}
           </View>
         </View>
       </View>
