@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const videoUrls = [
     "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
   ];
 
   const videosData = [
@@ -20,9 +20,9 @@ export default function HomeScreen() {
         comments: 13,
         shares: 11,
       },
-      endorserTitle: "Geraldo - SWE Manager @ Adobe",
+      endorserTitle: "Cristobal - SWE Manager @ Adobe",
       skills: ["Software Development", "Agile Methodologies"],
-      endorserProfilePicture: require("../images/profileLogo.png"),
+      endorserProfilePicture: require("../images/Cristobal.png"),
     },
     {
       metrics: {
@@ -31,9 +31,9 @@ export default function HomeScreen() {
         comments: 3,
         shares: 1,
       },
-      endorserTitle: "Jessica - MLE @ Lyft",
+      endorserTitle: "David - MLE @ Lyft",
       skills: ["Machine Learning", "Model Training"],
-      endorserProfilePicture: require("../images/profileLogo.png"),
+      endorserProfilePicture: require("../images/David.png"),
     },
     {
       metrics: {
@@ -42,9 +42,9 @@ export default function HomeScreen() {
         comments: 11,
         shares: 9,
       },
-      endorserTitle: "Alex - Product Manager @ Nexter",
+      endorserTitle: "James - Product Manager @ CS147",
       skills: ["Software Development", "Product Management"],
-      endorserProfilePicture: require("../images/profileLogo.png"),
+      endorserProfilePicture: require("../images/Landay.png"),
     },
   ];
 

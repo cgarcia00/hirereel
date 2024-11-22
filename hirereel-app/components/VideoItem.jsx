@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -6,6 +6,9 @@ import {
   Dimensions,
   Text,
   Image,
+  TouchableOpacity,
+  Modal,
+  FlatList,
 } from "react-native";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { useIsFocused } from "@react-navigation/native";
@@ -17,6 +20,19 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
   });
 
   const isFocused = useIsFocused();
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(videoData.metrics.likes);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [comments, setComments] = useState([]);
+
+  // Mock comments for the video
+  const mockComments = Array(videoData.metrics.comments)
+    .fill(null)
+    .map((_, index) => ({
+      id: index.toString(),
+      username: `User${index + 1}`,
+      comment: `This is comment number ${index + 1}`,
+    }));
 
   useEffect(() => {
     if (isPlaying && isFocused) {
@@ -26,6 +42,22 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
       player.seekBy(0);
     }
   }, [isPlaying, isFocused, player]);
+
+  // Toggle like functionality
+  const handleLikeToggle = () => {
+    if (isLiked) {
+      setLikes((prevLikes) => prevLikes - 1);
+    } else {
+      setLikes((prevLikes) => prevLikes + 1);
+    }
+    setIsLiked(!isLiked);
+  };
+
+  // Open the comments modal and set comments
+  const handleCommentPress = () => {
+    setComments(mockComments); // Set the mock comments for this video
+    setModalVisible(true); // Show the modal
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -40,20 +72,27 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
         <View style={styles.videoInfoSubcontainer}>
           <View style={styles.videoMetricsSubcontainer}>
             <View style={styles.videoMetric}>
-              <Ionicons name="play" size={25}></Ionicons>
-              <Text> {videoData.metrics.plays}</Text>
+              <Ionicons name="play" size={25} />
+              <Text style={styles.metricText}>{videoData.metrics.plays}</Text>
             </View>
+            <TouchableOpacity style={styles.videoMetric} onPress={handleLikeToggle}>
+              <Ionicons
+                name="heart"
+                size={25}
+                color={isLiked ? "#EC4D04" : "#000"}
+              />
+              <Text style={styles.metricText}>{likes}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.videoMetric}
+              onPress={handleCommentPress}
+            >
+              <Ionicons name="chatbubble" size={25} />
+              <Text style={styles.metricText}>{videoData.metrics.comments}</Text>
+            </TouchableOpacity>
             <View style={styles.videoMetric}>
-              <Ionicons name="heart" size={25}></Ionicons>
-              <Text> {videoData.metrics.likes}</Text>
-            </View>
-            <View style={styles.videoMetric}>
-              <Ionicons name="chatbubble" size={25}></Ionicons>
-              <Text> {videoData.metrics.comments}</Text>
-            </View>
-            <View style={styles.videoMetric}>
-              <Ionicons name="share-social" size={25}></Ionicons>
-              <Text> {videoData.metrics.shares}</Text>
+              <Ionicons name="share-social" size={25} />
+              <Text style={styles.metricText}>{videoData.metrics.shares}</Text>
             </View>
           </View>
           <View style={styles.endorserSubcontainer}>
@@ -73,6 +112,36 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
           </View>
         </View>
       </View>
+
+      {/* Comments Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Comments</Text>
+            <FlatList
+              data={comments}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View style={styles.commentItem}>
+                  <Text style={styles.commentUsername}>{item.username}</Text>
+                  <Text style={styles.commentText}>{item.comment}</Text>
+                </View>
+              )}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -99,6 +168,19 @@ const styles = StyleSheet.create({
     paddingLeft: "3%",
     paddingTop: "3%",
   },
+  videoMetricsSubcontainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: "1%",
+  },
+  videoMetric: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  metricText: {
+    width: 30,
+    textAlign: "center",
+  },
   endorserSubcontainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -110,19 +192,10 @@ const styles = StyleSheet.create({
   skillsSubcontainer: {
     flexDirection: "row",
   },
-  videoMetricsSubcontainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: "1%",
-  },
-  videoMetric: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   profileLogo: {
     width: 40,
     height: 40,
-    marginRight: "1%",
+    marginRight: "5%",
   },
   skill: {
     backgroundColor: "#EC4D04",
@@ -134,6 +207,47 @@ const styles = StyleSheet.create({
   skillsText: {
     color: "#FFFFFF",
     fontSize: 14,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "95%",
+    height: "50%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  commentItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#DDD",
+    paddingVertical: 8,
+  },
+  commentUsername: {
+    fontWeight: "bold",
+    color: "#000",
+  },
+  commentText: {
+    color: "#555",
+  },
+  closeButton: {
+    marginTop: 16,
+    backgroundColor: "#EC4D04",
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
   },
 });
 
