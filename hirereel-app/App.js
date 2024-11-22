@@ -12,11 +12,27 @@ import RecruiterProfileScreen from "./screens/RecruiterProfileScreen.js";
 import Header from "./components/Header.jsx";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import Notification from "./screens/Notifications.js";
+import { useNotification } from "./contexts/NotificationContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// Stack Navigator for Network
+const NotificationWrapper = () => {
+  const { notification, hideNotification } = useNotification();
+
+  if (!notification) return null;
+
+  return (
+    <Notification
+      visible={notification.visible}
+      message={notification.message}
+      onClose={hideNotification}
+    />
+  );
+};
+
 const NetworkStack = () => {
   return (
     <Stack.Navigator>
@@ -56,83 +72,90 @@ const NetworkStack = () => {
   );
 };
 
-export default function App() {
+function AppContent() {
   return (
-    <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="#EC4D04"
-        translucent={false}
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Inbox") {
+            iconName = focused ? "mail" : "mail-outline";
+          } else if (route.name === "Create") {
+            iconName = focused ? "add-circle" : "add-circle-outline";
+          } else if (route.name === "Network") {
+            iconName = focused ? "people" : "people-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#ECE7DF",
+        tabBarInactiveTintColor: "#C7B89E",
+        tabBarBackground: () => (
+          <View
+            style={[StyleSheet.absoluteFill, { backgroundColor: "#EC4D04" }]}
+          />
+        ),
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+        }}
       />
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === "Home") {
-                iconName = focused ? "home" : "home-outline";
-              } else if (route.name === "Inbox") {
-                iconName = focused ? "mail" : "mail-outline";
-              } else if (route.name === "Create") {
-                iconName = focused ? "add-circle" : "add-circle-outline";
-              } else if (route.name === "Network") {
-                iconName = focused ? "people" : "people-outline";
-              }
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "#ECE7DF",
-            tabBarInactiveTintColor: "#C7B89E",
-            tabBarBackground: () => (
-              <View
-                style={[
-                  StyleSheet.absoluteFill,
-                  { backgroundColor: "#EC4D04" },
-                ]}
-              />
-            ),
-          })}
-        >
-          <Tab.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerTitle: () => <Header />,
-              headerStyle: {
-                backgroundColor: "#EC4D04",
-              },
-            }}
-          />
-          <Tab.Screen
-            name="Inbox"
-            component={InboxScreen}
-            options={{
-              headerTitle: () => <Header />,
-              headerStyle: {
-                backgroundColor: "#EC4D04",
-              },
-            }}
-          />
-          <Tab.Screen
-            name="Create"
-            component={CreateScreen}
-            options={{
-              headerTitle: () => <Header />,
-              headerStyle: {
-                backgroundColor: "#EC4D04",
-              },
-            }}
-          />
-          {/* Use NetworkStack as the component for the Network tab */}
-          <Tab.Screen
-            name="Network"
-            component={NetworkStack}
-            options={{
-              headerShown: false, // Hide the default header since the stack will handle headers
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+      <Tab.Screen
+        name="Inbox"
+        component={InboxScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Create"
+        component={CreateScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Network"
+        component={NetworkStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
   );
 }
+
+export default function App() {
+  return (
+    <NotificationProvider>
+      <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#EC4D04"
+          translucent={false}
+        />
+        <NavigationContainer>
+          <AppContent />
+          <NotificationWrapper />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </NotificationProvider>
+  );
+}
+
+//new 2
