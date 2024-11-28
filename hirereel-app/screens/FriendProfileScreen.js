@@ -7,24 +7,39 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNotification } from "../contexts/NotificationContext";
 
 const FriendProfileScreen = ({ route, navigation }) => {
-  const { profile } = route.params; // Receive the profile data from navigation
+  const { profile } = route.params;
+  const { showNotification } = useNotification();
+
+  const handleRequest = () => {
+    showNotification(`Your HireReel request to ${profile.name} has been sent.`);
+    navigation.navigate("Home");
+  };
 
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
+
         <View style={styles.profileInfo}>
           <Image source={profile.image} style={styles.profileImage} />
-          <View>
+          <View style={styles.textContainer}>
             <Text style={styles.name}>{profile.name}</Text>
             <Text style={styles.title}>{profile.title}</Text>
           </View>
         </View>
+
+        <TouchableOpacity style={styles.requestButton} onPress={handleRequest}>
+          <Text style={styles.requestButtonText}>Request HireReel</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Experiences Section */}
@@ -44,11 +59,6 @@ const FriendProfileScreen = ({ route, navigation }) => {
           <Text style={styles.cardSubtitle}>{edu.date}</Text>
         </View>
       ))}
-
-      {/* Request Button */}
-      <TouchableOpacity style={styles.requestButton}>
-        <Text style={styles.requestButtonText}>Request HireReel</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -60,18 +70,22 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
     marginBottom: 24,
   },
+  backButton: {
+    marginBottom: 16,
+  },
   backArrow: {
-    fontSize: 20,
+    fontSize: 24,
     color: "#000",
-    marginRight: 8,
   },
   profileInfo: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 16,
+  },
+  textContainer: {
+    flex: 1,
   },
   profileImage: {
     width: 60,
@@ -112,15 +126,17 @@ const styles = StyleSheet.create({
   requestButton: {
     backgroundColor: "#EC4D04",
     paddingVertical: 12,
-    paddingHorizontal: 24,
     borderRadius: 20,
-    alignSelf: "center",
-    marginVertical: 20,
+    alignItems: "center",
+    marginTop: 8,
   },
   requestButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
 export default FriendProfileScreen;
+//acc new
+
