@@ -139,7 +139,7 @@ const NetworkScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFDCD1",
+    backgroundColor: "#FFF",
     paddingHorizontal: 16,
     paddingTop: 16,
     justifyContent: "center",
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 16,
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FFDCD1",
     borderRadius: 50,
     width: Dimensions.get("window").width * 0.5,
     marginLeft: "1%",
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     alignItems: "center",
     borderRadius: 20,
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FFDCD1",
   },
   activeTabButton: {
     backgroundColor: "#EC4D04", // Active tab background
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FFDCD1",
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
