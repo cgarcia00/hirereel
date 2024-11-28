@@ -21,7 +21,7 @@ export default function Header() {
       </View>
       <Image
         style={styles.profileLogo}
-        source={require("../images/profileLogo.png")}
+        source={require("../images/Maxim.png")}
       />
     </View>
   );
