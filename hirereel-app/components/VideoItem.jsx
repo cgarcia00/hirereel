@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   videoInfoSubcontainer: {
     width: Dimensions.get("window").width,
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FFF",
     flex: 1,
     paddingLeft: "3%",
     paddingTop: "3%",

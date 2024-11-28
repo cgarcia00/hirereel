@@ -56,7 +56,7 @@ const FriendProfileScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFDCD1",
+    backgroundColor: "#FFF",
     padding: 16,
   },
   header: {
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   card: {
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FFDCD1",
     padding: 16,
     borderRadius: 10,
     marginBottom: 16,
