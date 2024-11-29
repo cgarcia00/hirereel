@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,12 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  TextInput,
 } from "react-native";
 
 const NetworkScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState("Friends");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const friends = [
     {
@@ -65,9 +67,22 @@ const NetworkScreen = ({ navigation }) => {
       image: require("../images/profileLogo.png"),
     },
   ];
+  //added search query
+  const filterData = useCallback(
+    (data) => {
+      return data.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    },
+    [searchQuery]
+  );
 
   // Data to display based on selected tab
-  const dataToDisplay = selectedTab === "Friends" ? friends : recruiters;
+  const dataToDisplay = filterData(
+    selectedTab === "Friends" ? friends : recruiters
+  );
 
   return (
     <View style={styles.container}>
@@ -108,6 +123,17 @@ const NetworkScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search by name or title..."
+          placeholderTextColor="#666"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+
       {/* List Section */}
       <FlatList
         data={dataToDisplay}
@@ -143,6 +169,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     justifyContent: "center",
+  },
+  searchContainer: {
+    marginBottom: 16,
+    marginTop: 8,
+    paddingHorizontal: "1%",
+  },
+  searchInput: {
+    backgroundColor: "#FDA982",
+    borderRadius: 10,
+    padding: 12,
+    color: "#000",
+    fontSize: 16,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
   },
   tabContainer: {
     flexDirection: "row",
