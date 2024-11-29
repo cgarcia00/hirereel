@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,23 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { useNotification } from "../contexts/NotificationContext";
 
 const RecruiterProfileScreen = ({ route, navigation }) => {
   const { profile } = route.params;
   const { showNotification } = useNotification();
+  const [message, setMessage] = useState("");
 
   const handleRequest = () => {
     showNotification(`Your HireReel has been sent to ${profile.name}`);
-    navigation.navigate("Home");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Home" }],
+    });
   };
 
-  // Different roles based on recruiter
   const getRecruiterRoles = (recruiterTitle) => {
     if (recruiterTitle.includes("Google")) {
       return [
@@ -79,6 +83,18 @@ const RecruiterProfileScreen = ({ route, navigation }) => {
           </View>
         </View>
 
+        {/* Message Input */}
+        <TextInput
+          style={styles.messageInput}
+          placeholder="Add a message..."
+          placeholderTextColor="#666"
+          value={message}
+          onChangeText={setMessage}
+          multiline
+          numberOfLines={3}
+          textAlignVertical="top"
+        />
+
         <TouchableOpacity style={styles.requestButton} onPress={handleRequest}>
           <Text style={styles.requestButtonText}>Send my HireReel</Text>
         </TouchableOpacity>
@@ -135,6 +151,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
   },
+  messageInput: {
+    backgroundColor: "#FDA982",
+    borderRadius: 10,
+    padding: 12,
+    color: "#000",
+    fontSize: 16,
+    minHeight: 80,
+    marginBottom: 16,
+    textAlignVertical: "top",
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -171,5 +197,3 @@ const styles = StyleSheet.create({
 });
 
 export default RecruiterProfileScreen;
-//acc new
-

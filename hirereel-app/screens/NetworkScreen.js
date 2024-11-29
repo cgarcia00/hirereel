@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,12 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  TextInput,
 } from "react-native";
 
 const NetworkScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState("Friends");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const friends = [
     {
@@ -66,13 +68,27 @@ const NetworkScreen = ({ navigation }) => {
     },
   ];
 
-  // Data to display based on selected tab
-  const dataToDisplay = selectedTab === "Friends" ? friends : recruiters;
+  const filterData = useCallback(
+    (data) => {
+      return data.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    },
+    [searchQuery]
+  );
+
+  // Data to display based on selected tab and search query
+  const dataToDisplay = filterData(
+    selectedTab === "Friends" ? friends : recruiters
+  );
 
   return (
     <View style={styles.container}>
-      {/* Tab Section */}
       <Text style={styles.pageTitle}>Your Network</Text>
+
+      {/* Tab Section */}
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[
@@ -108,10 +124,26 @@ const NetworkScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search by name or title..."
+          placeholderTextColor="#666"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+
       {/* List Section */}
       <FlatList
         data={dataToDisplay}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No matches found</Text>
+          </View>
+        )}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.listItem}
@@ -144,6 +176,26 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     justifyContent: "center",
   },
+  searchContainer: {
+    marginBottom: 16,
+    marginTop: 8,
+    paddingHorizontal: "1%",
+  },
+  searchInput: {
+    backgroundColor: "#FDA982",
+    borderRadius: 10,
+    padding: 12,
+    color: "#000",
+    fontSize: 16,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+  },
   tabContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -161,10 +213,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FDA982",
   },
   activeTabButton: {
-    backgroundColor: "#EC4D04", // Active tab background
+    backgroundColor: "#EC4D04",
   },
   tabText: {
-    color: "#000", // Default text color
+    color: "#000",
     fontWeight: "bold",
   },
   activeTabText: {
