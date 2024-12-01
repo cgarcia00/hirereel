@@ -10,11 +10,11 @@ import {
   Dimensions,
 } from "react-native";
 
-export default function MessagesScreen({ navigation }) {
+export default function InboxScreen({ navigation }) {
   const [selectedTab, setSelectedTab] = useState("Friends");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Hardcoded friend chat data
+  // Friend chat data
   const friendChats = [
     {
       id: "1",
@@ -23,6 +23,16 @@ export default function MessagesScreen({ navigation }) {
       lastMessage: "Emma requested a hire reel.",
       timestamp: "2h ago",
       isUnread: true,
+      type: "friend",
+      title: "SWE @ Boogle",
+      experiences: [
+        { role: "Software Engineer, Boogle, CA", date: "Oct 2023 - Oct 2024" },
+        {
+          role: "CS147 Course Assistant, Stanford, CA",
+          date: "Sep 2022 - June 2023",
+        },
+      ],
+      education: [{ institution: "Stanford University", date: "2019 - 2023" }],
     },
     {
       id: "2",
@@ -31,6 +41,13 @@ export default function MessagesScreen({ navigation }) {
       lastMessage: "Hamilton sent you a hire reel.",
       timestamp: "5h ago",
       isUnread: false,
+      type: "friend",
+      title: "Staff SWE @ Tesla",
+      experiences: [
+        { role: "Software Engineer, Tesla, CA", date: "2021 - Present" },
+        { role: "SWE Intern, Tesla, CA", date: "2020 - 2021" },
+      ],
+      education: [{ institution: "MIT", date: "2017 - 2021" }],
     },
     {
       id: "3",
@@ -39,10 +56,17 @@ export default function MessagesScreen({ navigation }) {
       lastMessage: "Sure, I'll send you one soon.",
       timestamp: "1d ago",
       isUnread: false,
+      type: "friend",
+      title: "SWE Manager @ Adobe",
+      experiences: [
+        { role: "Manager, Adobe, CA", date: "2018 - Present" },
+        { role: "Software Engineer, Adobe, CA", date: "2015 - 2018" },
+      ],
+      education: [{ institution: "Stanford University", date: "2011 - 2015" }],
     },
   ];
 
-  // Added recruiter chat data
+  // Recruiter chat data
   const recruiterChats = [
     {
       id: "4",
@@ -51,6 +75,8 @@ export default function MessagesScreen({ navigation }) {
       lastMessage: "Would you be interested in a position at Google?",
       timestamp: "3h ago",
       isUnread: true,
+      type: "recruiter",
+      title: "Technical Recruiter @ Google",
     },
     {
       id: "5",
@@ -60,10 +86,11 @@ export default function MessagesScreen({ navigation }) {
         "Thanks for connecting! I'd love to discuss opportunities at Meta.",
       timestamp: "1d ago",
       isUnread: false,
+      type: "recruiter",
+      title: "Recruiter @ Meta",
     },
   ];
 
-  // Filter chats based on search query and selected tab
   const filteredChats = useCallback(() => {
     const chats = selectedTab === "Friends" ? friendChats : recruiterChats;
     return chats.filter(
@@ -76,7 +103,20 @@ export default function MessagesScreen({ navigation }) {
   const renderChatItem = ({ item }) => (
     <TouchableOpacity
       style={styles.chatItem}
-      onPress={() => navigation.navigate("ChatScreen", { chat: item })}
+      onPress={() =>
+        navigation.navigate("MessageScreen", {
+          chat: {
+            ...item,
+            messages: [
+              {
+                type: "system",
+                content: item.lastMessage,
+                timestamp: item.timestamp,
+              },
+            ],
+          },
+        })
+      }
     >
       <Image source={item.image} style={styles.profileImage} />
       <View style={styles.chatContent}>
@@ -99,10 +139,8 @@ export default function MessagesScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Title Section */}
       <Text style={styles.pageTitle}>Your Messages</Text>
 
-      {/* Tab Section */}
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[
@@ -138,7 +176,6 @@ export default function MessagesScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -149,7 +186,6 @@ export default function MessagesScreen({ navigation }) {
         />
       </View>
 
-      {/* Chat List */}
       <FlatList
         data={filteredChats()}
         renderItem={renderChatItem}

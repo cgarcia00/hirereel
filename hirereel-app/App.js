@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, StyleSheet, StatusBar } from "react-native";
 import HomeScreen from "./screens/HomeScreen.js";
-import MessagesScreen from "./screens/InboxScreen.js";
+import InboxScreen from "./screens/InboxScreen.js";
+import MessageScreen from "./screens/MessageScreen.js";
 import CreateScreen from "./screens/CreateScreen.js";
 import NetworkScreen from "./screens/NetworkScreen.js";
 import FriendProfileScreen from "./screens/FriendProfileScreen.js";
@@ -44,6 +45,7 @@ const NetworkStack = () => {
           headerStyle: {
             backgroundColor: "#EC4D04",
           },
+          headerLeft: () => null,
         }}
       />
       <Stack.Screen
@@ -51,10 +53,10 @@ const NetworkStack = () => {
         component={FriendProfileScreen}
         options={{
           headerTitle: () => <Header />,
-          headerLeft: () => null,
           headerStyle: {
             backgroundColor: "#EC4D04",
           },
+          headerLeft: () => null,
         }}
       />
       <Stack.Screen
@@ -62,10 +64,60 @@ const NetworkStack = () => {
         component={RecruiterProfileScreen}
         options={{
           headerTitle: () => <Header />,
-          headerLeft: () => null,
           headerStyle: {
             backgroundColor: "#EC4D04",
           },
+          headerLeft: () => null,
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const MessageStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="InboxScreen"
+        component={InboxScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+        }}
+      />
+      <Stack.Screen
+        name="MessageScreen"
+        component={MessageScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+          headerLeft: () => null,
+        }}
+      />
+      <Stack.Screen
+        name="FriendProfileScreen"
+        component={FriendProfileScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+          headerLeft: () => null,
+        }}
+      />
+      <Stack.Screen
+        name="RecruiterProfileScreen"
+        component={RecruiterProfileScreen}
+        options={{
+          headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: "#EC4D04",
+          },
+          headerLeft: () => null,
         }}
       />
     </Stack.Navigator>
@@ -111,12 +163,9 @@ function AppContent() {
       />
       <Tab.Screen
         name="Messages"
-        component={MessagesScreen}
+        component={MessageStack}
         options={{
-          headerTitle: () => <Header />,
-          headerStyle: {
-            backgroundColor: "#EC4D04",
-          },
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -157,5 +206,3 @@ export default function App() {
     </NotificationProvider>
   );
 }
-
-//new 2
