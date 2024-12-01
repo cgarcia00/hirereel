@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { View, StyleSheet, StatusBar } from "react-native";
 import HomeScreen from "./screens/HomeScreen.js";
-import InboxScreen from "./screens/InboxScreen.js";
+import MessagesScreen from "./screens/InboxScreen.js";
 import CreateScreen from "./screens/CreateScreen.js";
 import NetworkScreen from "./screens/NetworkScreen.js";
 import FriendProfileScreen from "./screens/FriendProfileScreen.js";
@@ -81,7 +81,7 @@ function AppContent() {
           let iconName;
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Inbox") {
+          } else if (route.name === "Messages") {
             iconName = focused ? "mail" : "mail-outline";
           } else if (route.name === "Create") {
             iconName = focused ? "add-circle" : "add-circle-outline";
@@ -110,8 +110,8 @@ function AppContent() {
         }}
       />
       <Tab.Screen
-        name="Inbox"
-        component={InboxScreen}
+        name="Messages"
+        component={MessagesScreen}
         options={{
           headerTitle: () => <Header />,
           headerStyle: {
