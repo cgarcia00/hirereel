@@ -21,17 +21,23 @@ const MessageScreen = ({ route, navigation }) => {
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
 
+    const now = new Date();
+    const timestamp = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
     const newMessage = {
       content: messageInput.trim(),
-      timestamp: new Date().toLocaleTimeString(),
-      sender: "user", // Add sender field to distinguish between sent and received messages
+      timestamp: timestamp,
+      sender: "user",
       type: "message",
     };
 
     setMessages([...messages, newMessage]);
     setMessageInput("");
 
-    // Scroll to bottom after sending message
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -43,13 +49,67 @@ const MessageScreen = ({ route, navigation }) => {
     navigation.navigate(screenName, { profile: chat });
   };
 
+  const renderMessage = (message, index) => {
+    // Check specifically for hire reel notifications
+    const isHireReelNotification = message.content
+      .toLowerCase()
+      .includes("hire reel");
+
+    if (isHireReelNotification) {
+      return (
+        <View key={index} style={styles.systemMessageContainer}>
+          <Text style={styles.systemMessageText}>{message.content}</Text>
+        </View>
+      );
+    }
+
+    // All other messages should be in bubbles
+    const isUserMessage = message.sender === "user";
+    return (
+      <View
+        key={index}
+        style={[
+          styles.messageOuterContainer,
+          isUserMessage
+            ? styles.sentMessageContainer
+            : styles.receivedMessageContainer,
+        ]}
+      >
+        <View
+          style={[
+            styles.messageBubble,
+            isUserMessage ? styles.sentBubble : styles.receivedBubble,
+          ]}
+        >
+          <Text
+            style={[
+              styles.messageText,
+              isUserMessage
+                ? styles.sentMessageText
+                : styles.receivedMessageText,
+            ]}
+          >
+            {message.content}
+          </Text>
+          <Text
+            style={[
+              styles.timestamp,
+              isUserMessage ? styles.sentTimestamp : styles.receivedTimestamp,
+            ]}
+          >
+            {message.timestamp}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : null}
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -70,7 +130,6 @@ const MessageScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Messages Area */}
       <ScrollView
         style={styles.messagesContainer}
         ref={scrollViewRef}
@@ -78,56 +137,9 @@ const MessageScreen = ({ route, navigation }) => {
           scrollViewRef.current?.scrollToEnd({ animated: true })
         }
       >
-        {messages.map((message, index) => (
-          <View
-            key={index}
-            style={[
-              styles.messageWrapper,
-              message.type === "system" && styles.systemMessage,
-              message.sender === "user"
-                ? styles.sentMessage
-                : styles.receivedMessage,
-            ]}
-          >
-            {message.type !== "system" && (
-              <View
-                style={[
-                  styles.messageBubble,
-                  message.sender === "user"
-                    ? styles.sentBubble
-                    : styles.receivedBubble,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.messageText,
-                    message.sender === "user"
-                      ? styles.sentMessageText
-                      : styles.receivedMessageText,
-                  ]}
-                >
-                  {message.content}
-                </Text>
-                <Text
-                  style={[
-                    styles.timestamp,
-                    message.sender === "user"
-                      ? styles.sentTimestamp
-                      : styles.receivedTimestamp,
-                  ]}
-                >
-                  {message.timestamp}
-                </Text>
-              </View>
-            )}
-            {message.type === "system" && (
-              <Text style={styles.systemMessageText}>{message.content}</Text>
-            )}
-          </View>
-        ))}
+        {messages.map((message, index) => renderMessage(message, index))}
       </ScrollView>
 
-      {/* Input Area */}
       <View style={styles.inputContainer}>
         <TouchableOpacity style={styles.attachButton}>
           <Ionicons name="attach" size={24} color="#666" />
@@ -207,20 +219,38 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  messageWrapper: {
-    marginBottom: 12,
+  systemMessageContainer: {
+    alignItems: "center",
+    marginVertical: 12,
+  },
+  systemMessageText: {
+    fontSize: 14,
+    color: "#666",
+    fontStyle: "italic",
+    textAlign: "center",
+  },
+  messageOuterContainer: {
+    marginVertical: 4,
     maxWidth: "80%",
+  },
+  sentMessageContainer: {
+    alignSelf: "flex-end",
+  },
+  receivedMessageContainer: {
+    alignSelf: "flex-start",
   },
   messageBubble: {
     padding: 12,
     borderRadius: 20,
     maxWidth: "100%",
-  },
-  sentMessage: {
-    alignSelf: "flex-end",
-  },
-  receivedMessage: {
-    alignSelf: "flex-start",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
   },
   sentBubble: {
     backgroundColor: "#EC4D04",
@@ -232,22 +262,13 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
+    lineHeight: 20,
   },
   sentMessageText: {
-    color: "#FFF",
+    color: "#FFFFFF",
   },
   receivedMessageText: {
-    color: "#000",
-  },
-  systemMessage: {
-    alignSelf: "center",
-    marginVertical: 20,
-  },
-  systemMessageText: {
-    fontSize: 14,
-    color: "#666",
-    fontStyle: "italic",
-    textAlign: "center",
+    color: "#000000",
   },
   timestamp: {
     fontSize: 12,
@@ -287,4 +308,4 @@ const styles = StyleSheet.create({
 });
 
 export default MessageScreen;
-//new 3
+//new 4
