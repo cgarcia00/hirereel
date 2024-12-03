@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function HomeScreen() {
   const videoUrls = [
     "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
-    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
     "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
   ];
 
@@ -31,8 +31,8 @@ export default function HomeScreen() {
         comments: 3,
         shares: 1,
       },
-      endorserTitle: "David - MLE @ Lyft",
-      skills: ["Machine Learning", "Model Training"],
+      endorserTitle: "David Zhou - Senior Manager @ ABC Tech",
+      skills: ["Scrum/Agile", "Leadership Principles"],
       endorserProfilePicture: require("../images/David.png"),
     },
     {
