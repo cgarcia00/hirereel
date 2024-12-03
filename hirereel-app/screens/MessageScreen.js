@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,12 +11,25 @@ import {
   Platform,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useMessages } from "../contexts/MessageContext";
 
 const MessageScreen = ({ route, navigation }) => {
   const { chat } = route.params;
   const [messageInput, setMessageInput] = useState("");
-  const [messages, setMessages] = useState(chat.messages || []);
   const scrollViewRef = useRef();
+  const { getMessages, addMessage } = useMessages();
+  const messages = getMessages(chat.id);
+
+  useEffect(() => {
+    // Add initial system message if no messages exist
+    if (messages.length === 0 && chat.lastMessage) {
+      addMessage(chat.id, {
+        type: "system",
+        content: chat.lastMessage,
+        timestamp: chat.timestamp,
+      });
+    }
+  }, []);
 
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
@@ -35,13 +48,15 @@ const MessageScreen = ({ route, navigation }) => {
       type: "message",
     };
 
-    setMessages([...messages, newMessage]);
+    addMessage(chat.id, newMessage);
     setMessageInput("");
 
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   };
+
+  // Rest of your existing MessageScreen code remains the same...
 
   const navigateToProfile = () => {
     const screenName =

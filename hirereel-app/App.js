@@ -18,6 +18,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 import Notification from "./screens/Notifications.js";
 import { useNotification } from "./contexts/NotificationContext";
 import ProfileScreen from "./screens/ProfileScreen.js";
+import { MessageProvider } from "./contexts/MessageContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -275,18 +276,20 @@ const MainStack = () => {
 
 export default function App() {
   return (
-    <NotificationProvider>
-      <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="#EC4D04"
-          translucent={false}
-        />
-        <NavigationContainer>
-          <MainStack />
-          <NotificationWrapper />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </NotificationProvider>
+    <MessageProvider>
+      <NotificationProvider>
+        <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="#EC4D04"
+            translucent={false}
+          />
+          <NavigationContainer>
+             <MainStack />
+            <NotificationWrapper />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </NotificationProvider>
+    </MessageProvider>
   );
 }
