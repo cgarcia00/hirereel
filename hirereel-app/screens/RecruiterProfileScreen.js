@@ -9,13 +9,31 @@ import {
   TextInput,
 } from "react-native";
 import { useNotification } from "../contexts/NotificationContext";
+import { useMessages } from "../contexts/MessageContext"; // Correct import
 
 const RecruiterProfileScreen = ({ route, navigation }) => {
   const { profile } = route.params;
   const { showNotification } = useNotification();
   const [message, setMessage] = useState("");
+  const { addMessage } = useMessages(); // From MessageContext
 
   const handleRequest = () => {
+    if (message.trim()) {
+      const now = new Date();
+      const timestamp = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+
+      addMessage(profile.id, {
+        content: message.trim(),
+        timestamp: timestamp,
+        sender: "user",
+        type: "message",
+      });
+    }
+
     showNotification(`Your HireReel has been sent to ${profile.name}`);
     navigation.reset({
       index: 0,

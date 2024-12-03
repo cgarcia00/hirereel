@@ -16,6 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import Notification from "./screens/Notifications.js";
 import { useNotification } from "./contexts/NotificationContext";
+import { MessageProvider } from "./contexts/MessageContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -191,18 +192,20 @@ function AppContent() {
 
 export default function App() {
   return (
-    <NotificationProvider>
-      <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="#EC4D04"
-          translucent={false}
-        />
-        <NavigationContainer>
-          <AppContent />
-          <NotificationWrapper />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </NotificationProvider>
+    <MessageProvider>
+      <NotificationProvider>
+        <SafeAreaProvider style={{ flex: 1, backgroundColor: "#EC4D04" }}>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="#EC4D04"
+            translucent={false}
+          />
+          <NavigationContainer>
+            <AppContent />
+            <NotificationWrapper />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </NotificationProvider>
+    </MessageProvider>
   );
 }
