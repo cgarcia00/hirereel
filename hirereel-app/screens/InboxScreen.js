@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     width: Dimensions.get("window").width * 0.5,
     marginLeft: "1%",
+    marginTop: "3%",
   },
   tabButton: {
     flex: 1,
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "1%",
   },
   searchInput: {
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FDBA9B",
     borderRadius: 10,
     padding: 12,
     color: "#000",

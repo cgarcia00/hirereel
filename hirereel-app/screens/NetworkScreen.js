@@ -17,28 +17,6 @@ const NetworkScreen = ({ navigation }) => {
   const friends = [
     {
       id: "1",
-      name: "Hamilton Smith",
-      title: "Staff SWE @ Tesla",
-      image: require("../images/profileLogo.png"),
-      experiences: [
-        { role: "Software Engineer, Tesla, CA", date: "2021 - Present" },
-        { role: "SWE Intern, Tesla, CA", date: "2020 - 2021" },
-      ],
-      education: [{ institution: "MIT", date: "2017 - 2021" }],
-    },
-    {
-      id: "2",
-      name: "Geraldo",
-      title: "SWE Manager @ Adobe",
-      image: require("../images/profileLogo.png"),
-      experiences: [
-        { role: "Manager, Adobe, CA", date: "2018 - Present" },
-        { role: "Software Engineer, Adobe, CA", date: "2015 - 2018" },
-      ],
-      education: [{ institution: "Stanford University", date: "2011 - 2015" }],
-    },
-    {
-      id: "3",
       name: "Emma Parker",
       title: "SWE @ Boogle",
       image: require("../images/profileLogo.png"),
@@ -50,6 +28,28 @@ const NetworkScreen = ({ navigation }) => {
         },
       ],
       education: [{ institution: "Stanford University", date: "2019 - 2023" }],
+    },
+    {
+      id: "2",
+      name: "Hamilton Smith",
+      title: "Staff SWE @ Tesla",
+      image: require("../images/profileLogo.png"),
+      experiences: [
+        { role: "Software Engineer, Tesla, CA", date: "2021 - Present" },
+        { role: "SWE Intern, Tesla, CA", date: "2020 - 2021" },
+      ],
+      education: [{ institution: "MIT", date: "2017 - 2021" }],
+    },
+    {
+      id: "3",
+      name: "Geraldo",
+      title: "SWE Manager @ Adobe",
+      image: require("../images/profileLogo.png"),
+      experiences: [
+        { role: "Manager, Adobe, CA", date: "2018 - Present" },
+        { role: "Software Engineer, Adobe, CA", date: "2015 - 2018" },
+      ],
+      education: [{ institution: "Stanford University", date: "2011 - 2015" }],
     },
   ];
 
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "1%",
   },
   searchInput: {
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FDBA9B",
     borderRadius: 10,
     padding: 12,
     color: "#000",
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     width: Dimensions.get("window").width * 0.5,
     marginLeft: "1%",
+    marginTop: "3%",
   },
   tabButton: {
     flex: 1,

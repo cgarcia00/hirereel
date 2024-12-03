@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   messageInput: {
-    backgroundColor: "#FDA982",
+    backgroundColor: "#FDBA9B",
     borderRadius: 10,
     padding: 12,
     color: "#000",
