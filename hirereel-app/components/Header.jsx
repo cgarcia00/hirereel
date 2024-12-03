@@ -19,10 +19,6 @@ export default function Header() {
             HireReel
       </Text>
       </View>
-      <Image
-        style={styles.profileLogo}
-        source={require("../images/Maxim.png")}
-      />
     </View>
   );
 }
