@@ -285,7 +285,7 @@ export default function App() {
             translucent={false}
           />
           <NavigationContainer>
-             <MainStack />
+            <MainStack />
             <NotificationWrapper />
           </NavigationContainer>
         </SafeAreaProvider>
