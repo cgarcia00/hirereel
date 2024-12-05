@@ -13,6 +13,7 @@ import { Button } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import VideoItem from "../components/VideoItem";
+import { BarChart, PieChart } from "react-native-chart-kit";
 
 export default function ProfileScreen() {
   const videosData = [
@@ -56,6 +57,40 @@ export default function ProfileScreen() {
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
     },
   ];
+
+  const analyticsData = {
+    videoMetrics: {
+      labels: ["Video 1", "Video 2", "Video 3"],
+      datasets: [
+        {
+          data: [98, 42, 104],
+        },
+      ],
+    },
+    pieData: [
+      {
+        name: "Plays",
+        count: 244,
+        color: "#EC4D04",
+        legendFontColor: "#000",
+        legendFontSize: 15,
+      },
+      {
+        name: "Likes",
+        count: 72,
+        color: "#FFD700",
+        legendFontColor: "#000",
+        legendFontSize: 15,
+      },
+      {
+        name: "Shares",
+        count: 21,
+        color: "#00BFFF",
+        legendFontColor: "#000",
+        legendFontSize: 15,
+      },
+    ],
+  };
 
   const [view, setView] = useState("profile"); // Manage the current view state
   const [selectedHireReel, setSelectedHireReel] = useState(null); // For modal
@@ -159,10 +194,43 @@ export default function ProfileScreen() {
 
   if (view === "analytics") {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <BackButton onPress={() => setView("profile")} />
         <Text style={styles.pageTitle}>Your Analytics</Text>
-      </View>
+
+        {/* Bar Chart for Video Metrics */}
+        <Text style={styles.chartTitle}>Plays Per Video</Text>
+        <BarChart
+          data={analyticsData.videoMetrics}
+          width={350} // Width of the chart
+          height={220} // Height of the chart
+          yAxisLabel=""
+          chartConfig={{
+            backgroundColor: "#FFF",
+            backgroundGradientFrom: "#FFF",
+            backgroundGradientTo: "#FFF",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(236, 77, 4, ${opacity})`,
+          }}
+          style={styles.chart}
+        />
+
+        {/* Pie Chart for Total Engagement */}
+        <Text style={styles.chartTitle}>24 Hour Engagement Breakdown</Text>
+        <PieChart
+          data={analyticsData.pieData}
+          width={350}
+          height={220}
+          chartConfig={{
+            backgroundColor: "#FFF",
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          }}
+          accessor="count"
+          backgroundColor="transparent"
+          paddingLeft="15"
+          absolute
+        />
+      </ScrollView>
     );
   }
 
@@ -376,5 +444,16 @@ const styles = StyleSheet.create({
   },
   modalButtons: {
     flexDirection: "row",
+  },
+  chart: {
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 10,
+    textAlign: "center",
   },
 });
