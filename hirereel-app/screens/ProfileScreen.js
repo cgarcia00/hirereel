@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Modal,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
@@ -14,6 +15,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function ProfileScreen() {
   const [view, setView] = useState("profile"); // Manage the current view state
+  const [selectedHireReel, setSelectedHireReel] = useState(null); // For modal
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -38,6 +41,25 @@ export default function ProfileScreen() {
     ],
   };
 
+  const exampleHireReels = [
+    require("../images/Maxim.png"),
+    require("../images/Maxim.png"),
+    require("../images/Maxim.png"),
+    require("../images/Maxim.png"),
+    require("../images/Maxim.png"),
+    require("../images/Maxim.png"),
+  ];
+
+  const openModal = (hireReel) => {
+    setSelectedHireReel(hireReel);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedHireReel(null);
+  };
+
   const BackButton = ({ onPress }) => (
     <TouchableOpacity onPress={onPress} style={styles.backButton}>
       <Text style={styles.backArrow}>←</Text>
@@ -48,7 +70,47 @@ export default function ProfileScreen() {
     return (
       <View style={styles.container}>
         <BackButton onPress={() => setView("profile")} />
-        <Text style={styles.pageTitle}>Your Messages</Text>
+        <Text style={styles.pageTitle}>Your HireReels</Text>
+
+        <View style={styles.gridContainer}>
+          {exampleHireReels.map((hireReel, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => openModal(hireReel)}
+              style={styles.gridItem}
+            >
+              <Image source={hireReel} style={styles.gridImage} />
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Modal for HireReel */}
+        <Modal
+          visible={isModalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              {selectedHireReel && (
+                <Image source={selectedHireReel} style={styles.modalImage} />
+              )}
+              <Button
+                title="Share"
+                buttonStyle={styles.shareButton}
+                titleStyle={styles.shareButtonText}
+                onPress={() => Alert.alert("Share functionality coming soon!")}
+              />
+              <Button
+                title="Close"
+                buttonStyle={styles.closeButton}
+                titleStyle={styles.closeButtonText}
+                onPress={closeModal}
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -149,6 +211,71 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
   },
+  pageTitle: {
+    fontSize: 28,
+    color: "#000",
+    fontWeight: "bold",
+    marginBottom: "2%",
+    marginLeft: "2%",
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  gridItem: {
+    width: "30%",
+    aspectRatio: 1,
+    marginBottom: 10,
+  },
+  gridImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    width: "80%",
+  },
+  modalImage: {
+    width: "100%",
+    height: 200,
+    marginBottom: 20,
+  },
+  shareButton: {
+    backgroundColor: "#EC4D04",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  shareButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+  },
+  closeButton: {
+    backgroundColor: "#DDD",
+    borderRadius: 10,
+    padding: 10,
+  },
+  closeButtonText: {
+    color: "#000",
+  },
+  backButton: {
+    marginBottom: 16,
+  },
+  backArrow: {
+    fontSize: 24,
+    color: "#000",
+  },
   actionButtons: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -202,24 +329,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFF",
   },
-  backButton: {
-    marginBottom: 16,
-  },
-  backArrow: {
-    fontSize: 24,
-    color: "#000",
-  },
   placeholderText: {
     fontSize: 16,
     color: "#666",
     textAlign: "center",
     marginTop: 20,
-  },
-  pageTitle: {
-    fontSize: 28,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: "2%",
-    marginLeft: "2%",
   },
 });
