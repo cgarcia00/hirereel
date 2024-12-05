@@ -12,8 +12,51 @@ import {
 import { Button } from "@rneui/themed";
 import { supabase } from "../lib/supabase";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import VideoItem from "../components/VideoItem";
 
 export default function ProfileScreen() {
+  const videosData = [
+    {
+      metrics: {
+        plays: 98,
+        likes: 31,
+        comments: 13,
+        shares: 11,
+      },
+      endorserTitle: "From Cristobal Garcia",
+      skills: ["Software Development", "Agile Methodologies"],
+      endorserProfilePicture: require("../images/Cristobal.png"),
+      thumbNail: require("../images/Cristobal.png"),
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
+    },
+    {
+      metrics: {
+        plays: 42,
+        likes: 21,
+        comments: 3,
+        shares: 1,
+      },
+      endorserTitle: "From David Zhou",
+      skills: ["Scrum/Agile", "Leadership Principles"],
+      endorserProfilePicture: require("../images/David.png"),
+      thumbNail: require("../images/David.png"),
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
+    },
+    {
+      metrics: {
+        plays: 104,
+        likes: 20,
+        comments: 11,
+        shares: 9,
+      },
+      endorserTitle: "From James Landay",
+      skills: ["Software Development", "Product Management"],
+      endorserProfilePicture: require("../images/Landay.png"),
+      thumbNail: require("../images/Landay.png"),
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
+    },
+  ];
+
   const [view, setView] = useState("profile"); // Manage the current view state
   const [selectedHireReel, setSelectedHireReel] = useState(null); // For modal
   const [isModalVisible, setModalVisible] = useState(false);
@@ -28,7 +71,7 @@ export default function ProfileScreen() {
   };
 
   const profileData = {
-    name: "John Doe",
+    name: "Maxim Ivanov",
     title: "Software Engineer at Google",
     image: require("../images/Maxim.png"),
     experiences: [
@@ -40,15 +83,6 @@ export default function ProfileScreen() {
       { institution: "High School", date: "2010 - 2014" },
     ],
   };
-
-  const exampleHireReels = [
-    require("../images/Maxim.png"),
-    require("../images/Maxim.png"),
-    require("../images/Maxim.png"),
-    require("../images/Maxim.png"),
-    require("../images/Maxim.png"),
-    require("../images/Maxim.png"),
-  ];
 
   const openModal = (hireReel) => {
     setSelectedHireReel(hireReel);
@@ -73,13 +107,13 @@ export default function ProfileScreen() {
         <Text style={styles.pageTitle}>Your HireReels</Text>
 
         <View style={styles.gridContainer}>
-          {exampleHireReels.map((hireReel, index) => (
+          {videosData.map((hireReel, index) => (
             <TouchableOpacity
               key={index}
               onPress={() => openModal(hireReel)}
               style={styles.gridItem}
             >
-              <Image source={hireReel} style={styles.gridImage} />
+              <Image source={hireReel.thumbNail} style={styles.gridImage} />
             </TouchableOpacity>
           ))}
         </View>
@@ -94,20 +128,28 @@ export default function ProfileScreen() {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               {selectedHireReel && (
-                <Image source={selectedHireReel} style={styles.modalImage} />
+                <VideoItem
+                  videoUri={selectedHireReel.url}
+                  videoData={selectedHireReel}
+                  availableHeight={600}
+                  isPlaying={false}
+                  isModalView={true}
+                />
               )}
-              <Button
-                title="Share"
-                buttonStyle={styles.shareButton}
-                titleStyle={styles.shareButtonText}
-                onPress={() => Alert.alert("Share functionality coming soon!")}
-              />
-              <Button
-                title="Close"
-                buttonStyle={styles.closeButton}
-                titleStyle={styles.closeButtonText}
-                onPress={closeModal}
-              />
+              <View style={styles.modalButtons}>
+                <Button
+                  title="Share"
+                  buttonStyle={styles.shareButton}
+                  titleStyle={styles.shareButtonText}
+                  onPress={() => Alert.alert("Working on this.")}
+                />
+                <Button
+                  title="Close"
+                  buttonStyle={styles.closeButton}
+                  titleStyle={styles.closeButtonText}
+                  onPress={closeModal}
+                />
+              </View>
             </View>
           </View>
         </Modal>
@@ -244,12 +286,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
-    width: "80%",
-  },
-  modalImage: {
-    width: "100%",
-    height: 200,
-    marginBottom: 20,
+    width: "90%",
+    height: "70%",
   },
   shareButton: {
     backgroundColor: "#EC4D04",
@@ -265,6 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#DDD",
     borderRadius: 10,
     padding: 10,
+    marginLeft: 20,
   },
   closeButtonText: {
     color: "#000",
@@ -334,5 +373,8 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     marginTop: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
   },
 });

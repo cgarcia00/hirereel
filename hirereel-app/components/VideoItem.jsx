@@ -14,7 +14,7 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { useIsFocused } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
+const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying, isModalView=false }) => {
   const player = useVideoPlayer(videoUri, (playerInstance) => {
     playerInstance.loop = true;
   });
@@ -63,19 +63,19 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={[styles.videoContainer, { height: availableHeight }]}>
         <VideoView
-          style={styles.video}
+          style={isModalView ? styles.videoModal : styles.video}
           player={player}
           allowsFullscreen
           allowsPictureInPicture
           contentFit="cover"
         />
-        <View style={styles.videoInfoSubcontainer}>
+        <View style={isModalView ? styles.videoInfoSubcontainerModal : styles.videoInfoSubcontainer}>
           <View style={styles.videoMetricsSubcontainer}>
-            <View style={styles.videoMetric}>
+            <View style={isModalView ? {display: 'none'} : styles.videoMetric}>
               <Ionicons name="play" size={25} />
               <Text style={styles.metricText}>{videoData.metrics.plays}</Text>
             </View>
-            <TouchableOpacity style={styles.videoMetric} onPress={handleLikeToggle}>
+            <TouchableOpacity style={isModalView ? {display: 'none'} : styles.videoMetric} onPress={handleLikeToggle}>
               <Ionicons
                 name="heart"
                 size={25}
@@ -84,13 +84,13 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
               <Text style={styles.metricText}>{likes}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.videoMetric}
+              style={isModalView ? {display: 'none'} : styles.videoMetric}
               onPress={handleCommentPress}
             >
               <Ionicons name="chatbubble" size={25} />
               <Text style={styles.metricText}>{videoData.metrics.comments}</Text>
             </TouchableOpacity>
-            <View style={styles.videoMetric}>
+            <View style={isModalView ? {display: 'none'} : styles.videoMetric}>
               <Ionicons name="share-social" size={25} />
               <Text style={styles.metricText}>{videoData.metrics.shares}</Text>
             </View>
@@ -102,7 +102,7 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying }) => {
             />
             <Text style={styles.endorserUsername}>{videoData.endorserTitle}</Text>
           </View>
-          <View style={styles.skillsSubcontainer}>
+          <View style={isModalView ? {display: 'none'} : styles.skillsSubcontainer}>
             <Text>Skills: </Text>
             {videoData.skills.map((skill, index) => (
               <View style={styles.skill} key={index}>
@@ -248,6 +248,17 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "#FFF",
     fontWeight: "bold",
+  },
+  videoModal: {
+      width: "70%",
+      height: "80%",
+      marginBottom: "5%"
+  },
+  videoInfoSubcontainerModal: {
+    width: "70%",
+    backgroundColor: "#FFF",
+    alignItems: "center",
+    paddingTop: "3%",
   },
 });
 
