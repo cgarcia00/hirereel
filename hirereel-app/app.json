@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "hirereel",
     "name": "hirereel-app",
     "slug": "hirereel-app",
     "version": "1.0.0",
