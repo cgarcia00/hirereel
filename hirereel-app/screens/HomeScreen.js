@@ -29,12 +29,34 @@ export default function HomeScreen({ navigation }) {
       metrics: {
         plays: 98,
         likes: 31,
-        comments: 13,
+        comments: 4,
         shares: 11,
       },
       endorserTitle: "James - Product Manager @ CS147",
       skills: ["Software Development", "Product Management"],
       endorserProfilePicture: require("../images/Landay.png"),
+      comments: [
+        {
+          id: 1,
+          username: "Alice Zhang",
+          comment: "Second this!",
+        },
+        {
+          id: 2,
+          username: "Alex Forest",
+          comment: "Gotta mention their tenacity too.",
+        },
+        {
+          id: 3,
+          username: "Reed Jackson",
+          comment: "Inspiring.",
+        },
+        {
+          id: 4,
+          username: "John Smith",
+          comment: "Agree!",
+        },
+      ],
     },
     {
       metrics: {
@@ -46,17 +68,46 @@ export default function HomeScreen({ navigation }) {
       endorserTitle: "David Zhou - Senior Manager @ ABC Tech",
       skills: ["Scrum/Agile", "Leadership Principles"],
       endorserProfilePicture: require("../images/David.png"),
+      comments: [
+        {
+          id: 1,
+          username: "Pablo Perez",
+          comment: "Speak your truth David.",
+        },
+        {
+          id: 2,
+          username: "Oliver Bacon",
+          comment: "Maxim's leadership is on another level.",
+        },
+        {
+          id: 3,
+          username: "Jake Black",
+          comment: "The rain the background is crazy!",
+        },
+      ],
     },
     {
       metrics: {
         plays: 104,
         likes: 20,
-        comments: 11,
+        comments: 2,
         shares: 9,
       },
       endorserTitle: "Cristobal - SWE Manager @ Adobe",
       skills: ["Software Development", "Agile Methodologies"],
       endorserProfilePicture: require("../images/Cristobal.png"),
+      comments: [
+        {
+          id: 1,
+          username: "John Smith",
+          comment: "I agree!",
+        },
+        {
+          id: 2,
+          username: "Jasmin Lopez",
+          comment: "Yeah that are super skilled at what they do.",
+        },
+      ],
     },
   ];
 

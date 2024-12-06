@@ -27,7 +27,7 @@ export default function ProfileScreen() {
       endorserTitle: "From Cristobal Garcia",
       skills: ["Software Development", "Agile Methodologies"],
       endorserProfilePicture: require("../images/Cristobal.png"),
-      thumbNail: require("../images/Cristobal.png"),
+      thumbNail: require("../images/CristobalThumbNail.png"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mov",
     },
     {
@@ -40,7 +40,7 @@ export default function ProfileScreen() {
       endorserTitle: "From David Zhou",
       skills: ["Scrum/Agile", "Leadership Principles"],
       endorserProfilePicture: require("../images/David.png"),
-      thumbNail: require("../images/David.png"),
+      thumbNail: require("../images/DavidThumbNail.jpg"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
     },
     {
@@ -53,7 +53,7 @@ export default function ProfileScreen() {
       endorserTitle: "From James Landay",
       skills: ["Software Development", "Product Management"],
       endorserProfilePicture: require("../images/Landay.png"),
-      thumbNail: require("../images/Landay.png"),
+      thumbNail: require("../images/JamesThumbNail.png"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
     },
   ];

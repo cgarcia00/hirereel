@@ -23,16 +23,31 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying, isModalVie
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(videoData.metrics.likes);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [comments, setComments] = useState([]);
 
   // Mock comments for the video
-  const mockComments = Array(videoData.metrics.comments)
-    .fill(null)
-    .map((_, index) => ({
-      id: index.toString(),
-      username: `User${index + 1}`,
-      comment: `This is comment number ${index + 1}`,
-    }));
+  const mockComments = [
+    {
+      id: 1,
+      username: "John Smith",
+      comment: "So true!"
+    },
+    {
+      id: 1,
+      username: "John Smith",
+      comment: "So true!"
+    },
+    {
+      id: 1,
+      username: "John Smith",
+      comment: "So true!"
+    },
+    {
+      id: 1,
+      username: "John Smith",
+      comment: "So true!"
+    }
+  ]
+
 
   useEffect(() => {
     if (isPlaying && isFocused) {
@@ -55,7 +70,6 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying, isModalVie
 
   // Open the comments modal and set comments
   const handleCommentPress = () => {
-    setComments(mockComments); // Set the mock comments for this video
     setModalVisible(true); // Show the modal
   };
 
@@ -124,7 +138,7 @@ const VideoItem = ({ videoUri, videoData, availableHeight, isPlaying, isModalVie
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Comments</Text>
             <FlatList
-              data={comments}
+              data={videoData.comments}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View style={styles.commentItem}>
