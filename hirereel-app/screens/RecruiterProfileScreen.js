@@ -10,11 +10,9 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-
 import { useNotification } from "../contexts/NotificationContext";
-import { useMessages } from "../contexts/MessageContext"; // Correct import
+import { useMessages } from "../contexts/MessageContext";
 
-// Custom Checkbox Component
 const CustomCheckbox = ({ value, onValueChange }) => {
   return (
     <TouchableOpacity 
@@ -29,89 +27,14 @@ const CustomCheckbox = ({ value, onValueChange }) => {
   );
 };
 
-
 export default function RecruiterProfileScreen({ route, navigation }) {
   const { profile } = route.params;
-  const [isVideoSelectionVisible, setIsVideoSelectionVisible] = useState(false);
-  const [isMessageInputVisible, setIsMessageInputVisible] = useState(false);
-  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+  const [view, setView] = useState("profile"); // Main view state
   const [selectedVideo, setSelectedVideo] = useState([]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const VideoSelectionModal = ({
-    isVisible,
-    videosData,
-    selectedVideo,
-    handleVideoSelect,
-    onClose,
-    onNext,
-  }) => {
-    const [errorMessage, setErrorMessage] = useState("");
-  
-    const handleNext = () => {
-      if (selectedVideo.length === 0) {
-        setErrorMessage("Please select at least one video to send");
-      } else {
-        setErrorMessage("");
-        onNext();
-      }
-    };
-  
-    return (
-      <Modal visible={isVisible} animationType="slide">
-        <View style={styles.header}>
-          {/* Header */}
-
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={onClose} style={styles.backButton}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>Select Videos to Send</Text>
-  
-          {/* Error Message */}
-          {errorMessage ? (
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          ) : null}
-  
-          {/* Video List */}
-          <FlatList
-            data={videosData}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.videoItem}>
-                <Image source={item.thumbNail} style={styles.videoThumbnail} />
-                <View style={styles.videoInfo}>
-                  <Text style={styles.endorserTitle}>{item.endorserTitle}</Text>
-                  <Text>Skills: {item.skills.join(", ")}</Text>
-                </View>
-                <CustomCheckbox
-                  value={selectedVideo.includes(item.id)}
-                  onValueChange={() => handleVideoSelect(item.id)}
-                />
-              </View>
-            )}
-          />
-  
-          {/* Footer */}
-          <View style={styles.nextButtonContainer}>
-            <TouchableOpacity 
-              style={styles.nextButton} 
-              onPress={handleNext}
-            >
-              <Text style={styles.requestButtonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
+  const { showNotification } = useNotification();
+  const { addMessage } = useMessages();
 
   // Video data
   const videosData = [
@@ -200,12 +123,13 @@ export default function RecruiterProfileScreen({ route, navigation }) {
 
   const openRoles = getRecruiterRoles(profile.title);
 
-  // Handler to start the workflow
-  const handleSendHireReel = () => {
-    setIsVideoSelectionVisible(true);
-  };
+  const BackButton = ({ onPress }) => (
+    <TouchableOpacity onPress={onPress} style={styles.backButton}>
+      <Text style={styles.backArrow}>←</Text>
+    </TouchableOpacity>
+  );
 
-  // Handler when a video is selected
+  // Handlers
   const handleVideoSelect = (videoId) => {
     setSelectedVideo((prevSelected) =>
       prevSelected.includes(videoId)
@@ -214,41 +138,132 @@ export default function RecruiterProfileScreen({ route, navigation }) {
     );
   };
 
-  // Handler to send message
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      const selectedVideos = videosData.filter((video) =>
-        selectedVideo.includes(video.id)
-      );
-      console.log("Sending Video(s) and Message:", {
-        selectedVideos,
-        message,
-      });
+  const handleVideoSelectionNext = () => {
+    if (selectedVideo.length === 0) {
+      setErrorMessage("Please select at least one video to send");
+    } else {
+      setErrorMessage("");
+      setView("message");
     }
-    setIsMessageInputVisible(false);
-    setIsConfirmationVisible(true);
   };
 
-  // Handler to close the confirmation
-  const handleConfirmationClose = () => {
-    setIsConfirmationVisible(false);
+  const handleSendMessage = () => {
+    // Send the selected videos regardless of message
+    const selectedVideos = videosData.filter((video) =>
+      selectedVideo.includes(video.id)
+    );
+    
+    // If there's a message, add it to the messages
+    if (message.trim()) {
+      const now = new Date();
+      const timestamp = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+  
+      addMessage(profile.id, {
+        content: message.trim(),
+        timestamp: timestamp,
+        sender: "user",
+        type: "message",
+      });
+    }
+  
+    console.log("Sending Video(s) and Message:", {
+      selectedVideos,
+      message: message.trim() || null,
+    });
+  
+    showNotification(`Your HireReel has been sent to ${profile.name}.`);
     navigation.reset({
       index: 0,
       routes: [{ name: "Home" }],
     });
   };
 
+  // video selection
+  if (view === "video-selection") {
+    return (
+      <View style={styles.container}>
+        <BackButton onPress={() => setView("profile")} />
+        <Text style={styles.cardTitle}>Select Videos to Send</Text>
+  
+        {errorMessage ? (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        ) : null}
+  
+        <FlatList
+          data={videosData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.videoItem}>
+              <Image source={item.thumbNail} style={styles.videoThumbnail} />
+              <View style={styles.videoInfo}>
+                <Text style={styles.endorserTitle}>{item.endorserTitle}</Text>
+                <Text>Skills: {item.skills.join(", ")}</Text>
+              </View>
+              <CustomCheckbox
+                value={selectedVideo.includes(item.id)}
+                onValueChange={() => handleVideoSelect(item.id)}
+              />
+            </View>
+          )}
+          ListFooterComponent={() => (
+            <View style={styles.nextButtonContainer}>
+              <TouchableOpacity 
+                style={styles.nextButton} 
+                onPress={handleVideoSelectionNext}
+              >
+                <Text style={styles.requestButtonText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </View>
+    );
+  }
+
+  // Message view
+  if (view === "message") {
+    return (
+      <ScrollView style={styles.container}>
+        <BackButton onPress={() => setView("video-selection")} />
+        <View style={styles.header}>
+          <Text style={styles.modalTitle}>Add a Message (Optional)</Text>
+          
+          <TextInput
+            style={styles.messageInput}
+            placeholder="Add a message..."
+            placeholderTextColor="#650"
+            value={message}
+            onChangeText={setMessage}
+            multiline
+            numberOfLines={3}
+            textAlignVertical="top"
+          />
+          
+          <View style={styles.buttonContainer}>
+            
+            <TouchableOpacity
+              style={[styles.nextButton, message.trim() ? {} : styles.nextButtonDisabled]}
+              onPress={handleSendMessage}
+            >
+              <Text style={styles.requestButtonText}>
+                {message.trim() ? 'Send with Message' : 'Send'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  // Main Profile View (Default)
   return (
     <ScrollView style={styles.container}>
       {/* Recruiter Profile Section */}
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
-
         <View style={styles.profileInfo}>
           <Image source={profile.image} style={styles.profileImage} />
           <View style={styles.textContainer}>
@@ -269,60 +284,10 @@ export default function RecruiterProfileScreen({ route, navigation }) {
 
       <TouchableOpacity
         style={styles.requestButton}
-        onPress={handleSendHireReel}
+        onPress={() => setView("video-selection")}
       >
         <Text style={styles.requestButtonText}>Send my HireReel</Text>
       </TouchableOpacity>
-
-      <VideoSelectionModal
-        isVisible={isVideoSelectionVisible}
-        videosData={videosData}
-        selectedVideo={selectedVideo}
-        handleVideoSelect={handleVideoSelect}
-        onClose={() => setIsVideoSelectionVisible(false)}
-        onNext={() => {
-          setIsVideoSelectionVisible(false);
-          setIsMessageInputVisible(true);
-        }}
-      />
-
-
-      {/* Message Input Modal */}
-      <Modal visible={isMessageInputVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Leave a Message</Text>
-          <TextInput
-            style={styles.messageInput}
-            placeholder="Add a message..."
-            placeholderTextColor="#650"
-            value={message}
-            onChangeText={setMessage}
-            multiline
-            numberOfLines={3}
-            textAlignVertical="top"
-          />
-          <TouchableOpacity
-            style={styles.requestButton}
-            onPress={handleSendMessage}
-          >
-            <Text style={styles.requestButtonText}>Send</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
-      {/* Confirmation Modal */}
-      <Modal visible={isConfirmationVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Success!</Text>
-          <Text>Your HireReel has been successfully sent.</Text>
-          <TouchableOpacity
-            style={styles.requestButton}
-            onPress={handleConfirmationClose}
-          >
-            <Text style={styles.requestButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </ScrollView>
   );
 }
@@ -334,6 +299,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
+    marginBottom: 24,
+  },
+  headerx: {
+    marginTop: 30,
     marginBottom: 24,
   },
   backButton: {
