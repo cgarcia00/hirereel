@@ -35,10 +35,7 @@ const FriendProfileScreen = ({ route, navigation }) => {
     }
 
     showNotification(`Your HireReel request to ${profile.name} has been sent.`);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" }],
-    });
+    navigation.navigate("NetworkScreen");
   };
 
   return (

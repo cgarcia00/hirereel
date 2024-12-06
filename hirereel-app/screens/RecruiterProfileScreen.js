@@ -15,11 +15,11 @@ import { useMessages } from "../contexts/MessageContext";
 
 const CustomCheckbox = ({ value, onValueChange }) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={onValueChange}
       style={[
         styles.checkbox,
-        value ? styles.checkboxChecked : styles.checkboxUnchecked
+        value ? styles.checkboxChecked : styles.checkboxUnchecked,
       ]}
     >
       {value && <Text style={styles.checkmark}>✓</Text>}
@@ -29,7 +29,7 @@ const CustomCheckbox = ({ value, onValueChange }) => {
 
 export default function RecruiterProfileScreen({ route, navigation }) {
   const { profile } = route.params;
-  const [view, setView] = useState("profile"); // Main view state
+  const [view, setView] = useState("profile");
   const [selectedVideo, setSelectedVideo] = useState([]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -49,7 +49,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
       endorserTitle: "From Cristobal Garcia",
       skills: ["Software Development", "Agile Methodologies"],
       endorserProfilePicture: require("../images/Cristobal.png"),
-      thumbNail: require("../images/Cristobal.png"),
+      thumbNail: require("../images/CristobalThumbNail.png"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
     },
     {
@@ -63,7 +63,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
       endorserTitle: "From David Zhou",
       skills: ["Scrum/Agile", "Leadership Principles"],
       endorserProfilePicture: require("../images/David.png"),
-      thumbNail: require("../images/David.png"),
+      thumbNail: require("../images/DavidThumbNail.jpg"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
     },
     {
@@ -77,7 +77,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
       endorserTitle: "From James Landay",
       skills: ["Software Development", "Product Management"],
       endorserProfilePicture: require("../images/Landay.png"),
-      thumbNail: require("../images/Landay.png"),
+      thumbNail: require("../images/JamesThumbNail.png"),
       url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
     },
   ];
@@ -152,7 +152,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
     const selectedVideos = videosData.filter((video) =>
       selectedVideo.includes(video.id)
     );
-    
+
     // If there's a message, add it to the messages
     if (message.trim()) {
       const now = new Date();
@@ -161,7 +161,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
         minute: "2-digit",
         hour12: false,
       });
-  
+
       addMessage(profile.id, {
         content: message.trim(),
         timestamp: timestamp,
@@ -169,17 +169,14 @@ export default function RecruiterProfileScreen({ route, navigation }) {
         type: "message",
       });
     }
-  
+
     console.log("Sending Video(s) and Message:", {
       selectedVideos,
       message: message.trim() || null,
     });
-  
+
     showNotification(`Your HireReel has been sent to ${profile.name}.`);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" }],
-    });
+    navigation.navigate("NetworkScreen");
   };
 
   // video selection
@@ -188,11 +185,11 @@ export default function RecruiterProfileScreen({ route, navigation }) {
       <View style={styles.container}>
         <BackButton onPress={() => setView("profile")} />
         <Text style={styles.cardTitle}>Select Videos to Send</Text>
-  
+
         {errorMessage ? (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         ) : null}
-  
+
         <FlatList
           data={videosData}
           keyExtractor={(item) => item.id}
@@ -211,8 +208,8 @@ export default function RecruiterProfileScreen({ route, navigation }) {
           )}
           ListFooterComponent={() => (
             <View style={styles.nextButtonContainer}>
-              <TouchableOpacity 
-                style={styles.nextButton} 
+              <TouchableOpacity
+                style={styles.nextButton}
                 onPress={handleVideoSelectionNext}
               >
                 <Text style={styles.requestButtonText}>Next</Text>
@@ -231,7 +228,7 @@ export default function RecruiterProfileScreen({ route, navigation }) {
         <BackButton onPress={() => setView("video-selection")} />
         <View style={styles.header}>
           <Text style={styles.modalTitle}>Add a Message (Optional)</Text>
-          
+
           <TextInput
             style={styles.messageInput}
             placeholder="Add a message..."
@@ -242,15 +239,17 @@ export default function RecruiterProfileScreen({ route, navigation }) {
             numberOfLines={3}
             textAlignVertical="top"
           />
-          
+
           <View style={styles.buttonContainer}>
-            
             <TouchableOpacity
-              style={[styles.nextButton, message.trim() ? {} : styles.nextButtonDisabled]}
+              style={[
+                styles.nextButton,
+                message.trim() ? {} : styles.nextButtonDisabled,
+              ]}
               onPress={handleSendMessage}
             >
               <Text style={styles.requestButtonText}>
-                {message.trim() ? 'Send with Message' : 'Send'}
+                {message.trim() ? "Send with Message" : "Send"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -264,6 +263,12 @@ export default function RecruiterProfileScreen({ route, navigation }) {
     <ScrollView style={styles.container}>
       {/* Recruiter Profile Section */}
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Text style={styles.backArrow}>←</Text>
+        </TouchableOpacity>
         <View style={styles.profileInfo}>
           <Image source={profile.image} style={styles.profileImage} />
           <View style={styles.textContainer}>
@@ -402,7 +407,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   messageInput: {
-    width: '100%',
+    width: "100%",
     backgroundColor: "#FDBA9B",
     borderRadius: 10,
     padding: 12,
@@ -415,22 +420,22 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
   },
   checkboxUnchecked: {
-    borderColor: '#EC4D04',
-    backgroundColor: 'transparent',
+    borderColor: "#EC4D04",
+    backgroundColor: "transparent",
   },
   checkboxChecked: {
-    borderColor: '#EC4D04',
-    backgroundColor: '#EC4D04',
+    borderColor: "#EC4D04",
+    backgroundColor: "#EC4D04",
   },
   checkmark: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   nextButtonContainer: {
     width: "100%",
@@ -445,11 +450,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    marginTop: "2%",
   },
   errorMessage: {
-    color: 'red',
+    color: "red",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 8,
     marginBottom: 8,
     paddingHorizontal: 16,

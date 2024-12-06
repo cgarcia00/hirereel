@@ -141,9 +141,11 @@ const styles = StyleSheet.create({
   primaryButton: {
     width: 200,
     backgroundColor: "#EC4D04",
+    borderRadius: 50
   },
   secondaryButton: {
     width: 200,
     backgroundColor: "#FDA982",
+    borderRadius: 50
   },
 });
