@@ -28,7 +28,7 @@ export default function ProfileScreen() {
       skills: ["Software Development", "Agile Methodologies"],
       endorserProfilePicture: require("../images/Cristobal.png"),
       thumbNail: require("../images/Cristobal.png"),
-      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mov",
     },
     {
       metrics: {
