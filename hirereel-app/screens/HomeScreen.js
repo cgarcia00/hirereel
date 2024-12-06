@@ -19,9 +19,9 @@ export default function HomeScreen({ navigation }) {
   const [onboardingStep, setOnboardingStep] = useState(0);
 
   const videoUrls = [
-    "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
-    "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
-    "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mov",
+    "https://hirereel-videos.s3.us-east-1.amazonaws.com/james.mp4",
+    "https://hirereel-videos.s3.us-east-1.amazonaws.com/david.mp4",
+    "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mp4",
   ];
 
   const videosData = [

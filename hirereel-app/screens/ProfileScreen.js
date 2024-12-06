@@ -28,7 +28,7 @@ export default function ProfileScreen() {
       skills: ["Software Development", "Agile Methodologies"],
       endorserProfilePicture: require("../images/Cristobal.png"),
       thumbNail: require("../images/CristobalThumbNail.png"),
-      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mov",
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/cristobal.mp4",
     },
     {
       metrics: {
@@ -41,7 +41,7 @@ export default function ProfileScreen() {
       skills: ["Scrum/Agile", "Leadership Principles"],
       endorserProfilePicture: require("../images/David.png"),
       thumbNail: require("../images/DavidThumbNail.jpg"),
-      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/David.mov",
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/david.mp4",
     },
     {
       metrics: {
@@ -54,7 +54,7 @@ export default function ProfileScreen() {
       skills: ["Software Development", "Product Management"],
       endorserProfilePicture: require("../images/Landay.png"),
       thumbNail: require("../images/JamesThumbNail.png"),
-      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/James.mov",
+      url: "https://hirereel-videos.s3.us-east-1.amazonaws.com/james.mp4",
     },
   ];
 
