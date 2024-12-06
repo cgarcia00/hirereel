@@ -32,12 +32,12 @@ export default function LoginScreen() {
   return (
     <View>
       <Auth />
-      {/* <TouchableOpacity
+      <TouchableOpacity
         onPress={() => navigation.navigate("Tabs")}
         style={{ justifyContent: "center", alignItems: "center" }}
       >
         <Text>Skip</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </View>
   );
 }
