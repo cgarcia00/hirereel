@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { useMessages } from "../contexts/MessageContext";
 
 export default function InboxScreen({ navigation }) {
   const [selectedTab, setSelectedTab] = useState("Friends");
   const [searchQuery, setSearchQuery] = useState("");
+  const { isMessageRead } = useMessages();
 
   // Friend chat data
   const friendChats = [
@@ -22,7 +24,6 @@ export default function InboxScreen({ navigation }) {
       image: require("../images/profileLogo.png"),
       lastMessage: "Emma requested a hire reel.",
       timestamp: "2h ago",
-      isUnread: true,
       type: "friend",
       title: "SWE @ Boogle",
       experiences: [
@@ -40,7 +41,6 @@ export default function InboxScreen({ navigation }) {
       image: require("../images/profileLogo.png"),
       lastMessage: "Hamilton sent you a hire reel.",
       timestamp: "5h ago",
-      isUnread: false,
       type: "friend",
       title: "Staff SWE @ Tesla",
       experiences: [
@@ -55,7 +55,6 @@ export default function InboxScreen({ navigation }) {
       image: require("../images/profileLogo.png"),
       lastMessage: "Sure, I'll send you one soon.",
       timestamp: "1d ago",
-      isUnread: false,
       type: "friend",
       title: "SWE Manager @ Adobe",
       experiences: [
@@ -74,7 +73,6 @@ export default function InboxScreen({ navigation }) {
       image: require("../images/profileLogo.png"),
       lastMessage: "Would you be interested in a position at Google?",
       timestamp: "3h ago",
-      isUnread: true,
       type: "recruiter",
       title: "Technical Recruiter @ Google",
     },
@@ -85,7 +83,6 @@ export default function InboxScreen({ navigation }) {
       lastMessage:
         "Thanks for connecting! I'd love to discuss opportunities at Meta.",
       timestamp: "1d ago",
-      isUnread: false,
       type: "recruiter",
       title: "Recruiter @ Meta",
     },
@@ -127,7 +124,7 @@ export default function InboxScreen({ navigation }) {
         <Text
           style={[
             styles.lastMessageText,
-            item.isUnread && styles.unreadMessage,
+            !isMessageRead(item.id) && styles.unreadMessage,
           ]}
           numberOfLines={1}
         >

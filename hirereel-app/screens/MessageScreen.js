@@ -17,10 +17,13 @@ const MessageScreen = ({ route, navigation }) => {
   const { chat } = route.params;
   const [messageInput, setMessageInput] = useState("");
   const scrollViewRef = useRef();
-  const { getMessages, addMessage } = useMessages();
+  const { getMessages, addMessage, markAsRead } = useMessages();
   const messages = getMessages(chat.id);
 
   useEffect(() => {
+    // Mark as read when the screen is opened
+    markAsRead(chat.id);
+
     // Add initial system message if no messages exist
     if (messages.length === 0 && chat.lastMessage) {
       addMessage(chat.id, {
@@ -29,7 +32,7 @@ const MessageScreen = ({ route, navigation }) => {
         timestamp: chat.timestamp,
       });
     }
-  }, []);
+  }, [chat.id]);
 
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
@@ -56,8 +59,6 @@ const MessageScreen = ({ route, navigation }) => {
     }, 100);
   };
 
-  // Rest of your existing MessageScreen code remains the same...
-
   const navigateToProfile = () => {
     const screenName =
       chat.type === "friend" ? "FriendProfileScreen" : "RecruiterProfileScreen";
@@ -65,7 +66,6 @@ const MessageScreen = ({ route, navigation }) => {
   };
 
   const renderMessage = (message, index) => {
-    // Check specifically for hire reel notifications
     const isHireReelNotification = message.content
       .toLowerCase()
       .includes("hire reel");
@@ -78,7 +78,6 @@ const MessageScreen = ({ route, navigation }) => {
       );
     }
 
-    // All other messages should be in bubbles
     const isUserMessage = message.sender === "user";
     return (
       <View
@@ -323,4 +322,3 @@ const styles = StyleSheet.create({
 });
 
 export default MessageScreen;
-//new 4
