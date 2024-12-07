@@ -4,6 +4,7 @@ const MessageContext = createContext();
 
 export const MessageProvider = ({ children }) => {
   const [messagesByChat, setMessagesByChat] = useState({});
+  const [readStatus, setReadStatus] = useState({});
 
   const addMessage = (chatId, message) => {
     setMessagesByChat((prev) => ({
@@ -16,10 +17,23 @@ export const MessageProvider = ({ children }) => {
     return messagesByChat[chatId] || [];
   };
 
+  const markAsRead = (chatId) => {
+    setReadStatus((prev) => ({
+      ...prev,
+      [chatId]: true,
+    }));
+  };
+
+  const isMessageRead = (chatId) => {
+    return readStatus[chatId] || false;
+  };
+
   const value = {
     messagesByChat,
     addMessage,
     getMessages,
+    markAsRead,
+    isMessageRead,
   };
 
   return (
